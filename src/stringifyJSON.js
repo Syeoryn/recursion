@@ -5,6 +5,7 @@
 var stringifyJSON = function (obj) {
   var type =typeof obj;
 	if( type == 'object' )	type = Array.isArray(obj) ? 'array' : 'object';
+	var spacer = arguments[1]? "\n" + arguments[1] : "";
 	switch(true){
 		case type == 'string':
 			return "" + "\"" + obj + "\"";
@@ -19,8 +20,16 @@ var stringifyJSON = function (obj) {
 			return undefined
 			break;
 		case type == 'array':
+			var string = "["
+			for(var i = 0; i < obj.length; i++){
+				string += spacer + stringifyJSON(obj[i]);
+				if(i < obj.length-1) string += ",";
+			}
+			string += spacer.length > 0? "\n]" : "]";
+			return string;
 			break;
 		case type = 'object':
+			
 			break;
 	}
 };
