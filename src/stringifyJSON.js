@@ -3,6 +3,7 @@
 
 // but you don't so you're going to have to write it from scratch:
 var stringifyJSON = function (obj) {
+	if (obj == null) return 'null'
   var type =typeof obj;
 	if( type == 'object' )	type = Array.isArray(obj) ? 'array' : 'object';
 	var spacer = arguments[1]? "\n" + arguments[1] : "";
@@ -16,20 +17,25 @@ var stringifyJSON = function (obj) {
 		case type == 'boolean':
 			return "" + obj;
 			break;
-		case type == 'function':
-			return undefined
-			break;
 		case type == 'array':
 			var string = "["
 			for(var i = 0; i < obj.length; i++){
+				if(string != "[") string += ",";
 				string += spacer + stringifyJSON(obj[i]);
-				if(i < obj.length-1) string += ",";
 			}
 			string += spacer.length > 0? "\n]" : "]";
 			return string;
 			break;
-		case type = 'object':
-			
+		case type == 'object':
+			var string = "{"
+			for(key in obj){
+				if(typeof obj[key] != 'function' && obj[key] !== undefined){
+					if(string != "{") string += ',';
+					string += spacer + stringifyJSON(key,arguments[1]+arguments[1]) + ":" + stringifyJSON(obj[key],arguments[1]+arguments[1]);
+				}
+			}
+			string += spacer.length > 0? "\n}" : "}";
+			return string;
 			break;
 	}
 };
