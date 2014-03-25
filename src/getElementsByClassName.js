@@ -7,13 +7,19 @@
 var getElementsByClassName = function (className) {
   var elements = [];
 	if(this.childNodes.length > 0){
-		for(var i = 0; i < this.childNodes.length){
+		for(var i = 0; i < this.childNodes.length; i++){
 			var classes = this.childNodes[i].classList;
 			/* Iterate over classes to find if it has className,
 					then elements.push(thing).
 			*/
-			var newElements = getElementsByClassName.apply(this.childNodes[i],[className])
-			for(var j = 0; j < newElements.length; j++) elements.push(newElements[j]);
+			for(key in classes){
+				if(classes[key] == className) {
+					elements.push(this.childNodes[i]);
+					break;
+				}
+			}
+			var nestedElements = getElementsByClassName.apply(this.childNodes[i],[className]);
+			for(var j = 0; j < nestedElements.length; j++) if(nestedElements[j]) elements.push(nestedElements[j]);
 		}
 	}
 	return elements
